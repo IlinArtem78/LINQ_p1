@@ -11,6 +11,7 @@
 
 //Задача: выбрать имена на букву А и отсортировать в алфавитном порядке.
 using LINQ_p1;
+using System.Linq;
 
 class Program
 {
@@ -19,7 +20,7 @@ class Program
         try
         {
         string[] people = { "Анна", "Мария", "Сергей", "Алексей", "Дмитрий", "Ян" };
-        Console.WriteLine("Выберите тип программы 1 или 2, 3 - простые методы расширения, 4 - Задание 8, 5 - Задание 14.1.1"); 
+        Console.WriteLine("Выберите тип программы 1 или 2, 3 - простые методы расширения, 4 - Задание 8, 5 - Задание 14.1.1, 6 - Задание 14.1.2"); 
         byte Num = byte.Parse(Console.ReadLine());      
          switch (Num)
             {
@@ -101,11 +102,20 @@ class Program
                     var LenthCity = russianCities.Where(c => c.Name.Length <= 10).OrderBy(c => c.Name.Length);
                     Console.WriteLine($"Города по длине > 10  {LenthCity}");  
 
-
-
-
+                    break;
+                    case 6:
+                    //Соедините все слова в одну последовательность (каждое слово — отдельный элемент последовательности).
+                    string[] text = { "Раз два три",
+                     "четыре пять шесть",
+                     "семь восемь девять" };
+                    var words = from str in text // пробегаемся по элементам массива
+                                from word in str.Split(' ') // дробим каждый элемент по пробелам, сохраняя в новую последовательность
+                                select word;
+                    foreach( var word in words)
+                    {
+                        Console.WriteLine(word);
+                    }
                     break; 
-
             }
         }
         catch (Exception ex) 
