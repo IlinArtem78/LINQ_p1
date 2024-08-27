@@ -20,27 +20,28 @@ class Program
         try
         {
         string[] people = { "Анна", "Мария", "Сергей", "Алексей", "Дмитрий", "Ян" };
-        Console.WriteLine("Выберите тип программы 1 или 2, 3 - простые методы расширения, 4 - Задание 8, 5 - Задание 14.1.1, 6 - Задание 14.1.2"); 
-        byte Num = byte.Parse(Console.ReadLine());      
-         switch (Num)
+        Console.WriteLine("Выберите тип программы 1 или 2, 3 - простые методы расширения, 4 - Задание 8, 5 - Задание 14.1.1, 6 - Задание 14.1.2, " +
+            "8 - Задание 14.2.1, 9 - Задание 14.2.3"); 
+        byte Num = byte.Parse(Console.ReadLine());
+            switch (Num)
             {
-              case 1: 
-            
-                 List<string> list = new List<string>();
-                 foreach (var person in people) 
-                 { 
-                      if (person.ToUpper().StartsWith("А")) 
-                      {
-                          list.Add(person);
-                      }
-                  }
+                case 1:
+
+                    List<string> list = new List<string>();
+                    foreach (var person in people)
+                    {
+                        if (person.ToUpper().StartsWith("А"))
+                        {
+                            list.Add(person);
+                        }
+                    }
                     list.Sort();
-                 foreach (var person in list)
-                 {
-                     Console.WriteLine(person);
-                 }
-              break;
-              case 2:
+                    foreach (var person in list)
+                    {
+                        Console.WriteLine(person);
+                    }
+                    break;
+                case 2:
                     var selectedPeople = from p in people // промежуточная переменная p 
                                          where p.StartsWith("А") // фильтрация по условию
                                          orderby p // сортировка по возрастанию (дефолтная)
@@ -48,10 +49,10 @@ class Program
 
                     foreach (string s in selectedPeople)
                         Console.WriteLine(s);
-               break;
+                    break;
                 case 3:
                     SimpleExtLinq simpleExtLinq = new SimpleExtLinq();
-                break;
+                    break;
                 case 4:
                     //Используйте выражения LINQ, чтобы достать оттуда все имена и вывести их в консоль в алфавитном порядке.
                     var objects = new List<object>()
@@ -71,8 +72,8 @@ class Program
 
 
 
-                    break; 
-                    case 5:
+                    break;
+                case 5:
                     // Словарь для хранения стран с городами
                     var Countries = new Dictionary<string, List<City>>();
 
@@ -100,10 +101,10 @@ class Program
                     Countries.Add("США", americanCities);
                     //А теперь попробуйте выбрать все города, название у которых не длиннее 10 букв, и отсортируйте их по длине названия.
                     var LenthCity = russianCities.Where(c => c.Name.Length <= 10).OrderBy(c => c.Name.Length);
-                    Console.WriteLine($"Города по длине > 10  {LenthCity}");  
+                    Console.WriteLine($"Города по длине > 10  {LenthCity}");
 
                     break;
-                    case 6:
+                case 6:
                     //Соедините все слова в одну последовательность (каждое слово — отдельный элемент последовательности).
                     string[] text = { "Раз два три",
                      "четыре пять шесть",
@@ -111,7 +112,7 @@ class Program
                     var words = from str in text // пробегаемся по элементам массива
                                 from word in str.Split(' ') // дробим каждый элемент по пробелам, сохраняя в новую последовательность
                                 select word;
-                    foreach( var word in words)
+                    foreach (var word in words)
                     {
                         Console.WriteLine(word);
                     }
@@ -127,13 +128,60 @@ class Program
                     var newCollect = from col in numsList
                                      from s in col
                                      orderby s
-                                     select s; 
-                    foreach( var c in newCollect)
+                                     select s;
+                    foreach (var c in newCollect)
                     {
                         Console.WriteLine(c);
                     }
 
                     break;
+
+                case 8:
+                    //Сделайте выборку в анонимный тип с одновременной сортировкой слов по длине.
+                    //Результат выведите в консоль.
+                    string[] words1 = { "Обезьяна", "Лягушка", "Кот", "Собака", "Черепаха" };
+                    var nam = words1.Select(u => new
+                    {
+                        Name = u,
+                        Length = u.Length,
+
+                    })
+                      .OrderBy(c => c.Name.Length);   
+                    foreach(var c in  nam)
+                    {
+                        Console.WriteLine(c);
+                    }
+                break;
+                    case 9:
+                    List<Student> students = new List<Student>
+                    {
+                        new Student {StudentName="Андрей", Age=23, Languages = new List<string> {"английский", "немецкий" }},
+                        new Student {StudentName="Сергей", Age=27, Languages = new List<string> {"английский", "французский" }},
+                        new Student {StudentName="Дмитрий", Age=29, Languages = new List<string> {"английский", "испанский" }},
+                        new Student {StudentName="Василий", Age=24, Languages = new List<string> {"испанский", "немецкий" }}
+                    };
+                   // Выберите всех студентов моложе 27, сгенерируйте из них анкеты(модель класса расположена ниже).
+                    var application1 = from u in students   
+                                        where u.Age < 27
+                    let year = DateTime.Now.Year - u.Age
+                    
+                    select new
+                    {
+                        Name = u.StudentName,
+                        YearOfBirth = year
+                    };
+                    
+                    foreach (var st in application1)
+                    {
+                        
+                        Console.WriteLine(st);
+                    }
+
+
+
+                    break; 
+
+
             }
         }
         catch (Exception ex) 
@@ -157,4 +205,9 @@ public class City
 
     public string Name { get; set; }
     public long Population { get; set; }
+}
+public class Application
+{
+    public string Name { get; set; }
+    public int YearOfBirth { get; set; }
 }
