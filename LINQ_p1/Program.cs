@@ -12,6 +12,7 @@
 //Задача: выбрать имена на букву А и отсортировать в алфавитном порядке.
 using LINQ_p1;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 class Program
 {
@@ -20,11 +21,11 @@ class Program
         try
         {
         string[] people = { "Анна", "Мария", "Сергей", "Алексей", "Дмитрий", "Ян" };
-        Console.WriteLine("Выберите тип программы 1 или 2, 3 - простые методы расширения, 4 - Задание 8, 5 - Задание 14.1.1, 6 - Задание 14.1.2, " +
-            "8 - Задание 14.2.1, 9 - Задание 14.2.3"); 
+        Console.WriteLine("Введите 12 для доступа к Заданию 14.3.3"); 
         byte Num = byte.Parse(Console.ReadLine());
             switch (Num)
             {
+                /*
                 case 1:
 
                     List<string> list = new List<string>();
@@ -152,7 +153,7 @@ class Program
                         Console.WriteLine(c);
                     }
                 break;
-                    case 9:
+                case 9:
                     List<Student> students = new List<Student>
                     {
                         new Student {StudentName="Андрей", Age=23, Languages = new List<string> {"английский", "немецкий" }},
@@ -160,15 +161,24 @@ class Program
                         new Student {StudentName="Дмитрий", Age=29, Languages = new List<string> {"английский", "испанский" }},
                         new Student {StudentName="Василий", Age=24, Languages = new List<string> {"испанский", "немецкий" }}
                     };
-                   // Выберите всех студентов моложе 27, сгенерируйте из них анкеты(модель класса расположена ниже).
-                    var application1 = from u in students   
-                                        where u.Age < 27
+                    var coarses = new List<Coarse>
+                    {
+                     new Coarse {Name="Язык программирования C#", StartDate = new DateTime(2020, 12, 20)},
+                     new Coarse {Name="Язык SQL и реляционные базы данных", StartDate = new DateTime(2020, 12, 15)},
+                    };
+                    // Выберите всех студентов моложе 27, сгенерируйте из них анкеты(модель класса расположена ниже).
+                    var application1 = from u in students
+                                       from course in coarses
+                                       where u.Age < 29
+                                       where u.Languages.Contains("английский")
+                                       where course.Name.Contains("Язык программирования C#")
                     let year = DateTime.Now.Year - u.Age
                     
-                    select new
+                    select new 
                     {
                         Name = u.StudentName,
-                        YearOfBirth = year
+                        YearOfBirth = year,
+                        NameCourse = course.Name,
                     };
                     
                     foreach (var st in application1)
@@ -179,7 +189,80 @@ class Program
 
 
 
-                    break; 
+                    break;
+                case 10:
+                    var contacts = new List<Contact>()
+                    {
+                         new Contact() { Name = "Андрей", Phone = 7999945005 },
+                         new Contact() { Name = "Сергей", Phone = 799990455 },
+                         new Contact() { Name = "Иван", Phone = 79999675 },
+                         new Contact() { Name = "Игорь", Phone = 8884994 },
+                         new Contact() { Name = "Анна", Phone = 665565656 },
+                         new Contact() { Name = "Василий", Phone = 3434 }
+                    
+                    
+                    };
+                    Console.WriteLine("Введите значение страницы контактов");
+                    while (true)
+                    {
+                       byte keyChar = byte.Parse(Console.ReadLine()); // получаем символ с консоли
+                        IEnumerable<Contact> page = null;
+
+                        switch (keyChar)
+                        {
+                            case 1:
+                                 page = contacts.Take(2);
+                                break; 
+                                case 2:
+                                page = contacts.Skip(2).Take(2);
+                                break; 
+                                case 3:
+                                page = contacts.Skip(2).Take(2);
+                                break; 
+                                default:
+                                Console.WriteLine($"Ошибка ввода, страницы {keyChar} не существует");
+                                continue;
+                                break;
+                        }
+                        foreach (var contact in page)
+                            Console.WriteLine(contact.Name + " " + contact.Phone);
+                        
+                    }
+
+
+                    break;
+                case 11:
+                    // Подготовка данных
+                    var cars = new List<Car>()
+                        {
+                             new Car("Suzuki", "JP"),
+                             new Car("Toyota", "JP"),
+                             new Car("Opel", "DE"),
+                             new Car("Kamaz", "RUS"),
+                             new Car("Lada", "RUS"),
+                             new Car("Lada", "RUS"),
+                              new Car("Honda", "JP"),
+                        };
+
+                    cars.RemoveAll(x => x.CountryCode == "JP");
+                    var notJapanCars = cars.SkipWhile(car => car.CountryCode == "JP");
+                    foreach (var notJapanCar in notJapanCars)
+                        Console.WriteLine(notJapanCar.Manufacturer);
+                    Console.WriteLine("Пропустим японские машины в начале списка" + cars.RemoveAll(x => x.CountryCode == "JP"));
+                    Console.WriteLine();
+                    Console.WriteLine("Теперь выберем только японские машины из начала списка");
+                    var japanCars = cars.TakeWhile(car => car.CountryCode == "JP");
+
+                    foreach (var japanCar in japanCars)
+                        Console.WriteLine(japanCar.Manufacturer);
+                    break;
+                */
+                case 12:
+                    Task1 task1 = new Task1();
+                break;
+                default:
+                    Console.WriteLine("Введен неверный номер"); 
+                break;
 
 
             }
@@ -191,6 +274,9 @@ class Program
         }
 
     }
+
+
+  
 }
 
 
@@ -210,4 +296,28 @@ public class Application
 {
     public string Name { get; set; }
     public int YearOfBirth { get; set; }
+    public string NameCourse { get; set; }
+}
+
+public class Coarse
+{
+    public string Name { set; get; }
+    public DateTime StartDate { get; set; }
+}
+
+public class Contact
+{
+    public string Name { get; set; }
+    public decimal Phone {  get; set; } 
+}
+public class Car
+{
+    public string Manufacturer { get; set; }
+    public string CountryCode { get; set; }
+
+    public Car(string manufacturer, string countryCode)
+    {
+        Manufacturer = manufacturer;
+        CountryCode = countryCode;
+    }
 }
